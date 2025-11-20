@@ -1,7 +1,6 @@
 /*
- * vsec.c
+ * vsec.c codded by iosmen (c) 2025
  *
- * Single-file vsec tool (fixed)
  * - Supports JSON-based AES-256-CTR + HMAC-SHA256 vsec format and a small legacy fallback.
  * - Uses only Apple frameworks: CommonCrypto + Security + CoreFoundation
  * - DEK wrapping: PBKDF2 (passphrase + exe_hash) and RSA-OAEP
@@ -940,3 +939,4 @@ int main(int argc, char **argv) {
 
     return 0;
 }
+
