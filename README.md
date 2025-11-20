@@ -1,5 +1,6 @@
 # vsec
 VSecure mini file encryption via iOS binary [THIS IOS BINARY NEEDS A JAILBREAK]
+
 **ENCRYPT A FILE: vsec -e -pass "-d -pass "Password" -in file.txt -out file.vsec**
 **DECRYPT A FILE: vsec -d -pass "Password" -in input.txt.vsec -out decrypted.txt**
 
