@@ -1,2 +1,2 @@
 # vsec
-VSecure mini ios file encryption 
+VSecure mini file encryption via iOS binary [JAILBREAK NEED IT]
