@@ -1,2 +1,2 @@
 # vsec
-VSecure mini encryption 
+VSecure mini ios file encryption 
