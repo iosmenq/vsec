@@ -1,4 +1,3 @@
-# Makefile Header
 # Makefile for building vsec
 
 # Compiler
