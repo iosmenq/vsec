@@ -1,5 +1,5 @@
 /*
- * vsec.c codded by iosmen (c) 2025
+ * vsec.c codded by iosmen (c) 2025 Copyright All Rights Reserved.
  *
  * - Supports JSON-based AES-256-CTR + HMAC-SHA256 vsec format and a small legacy fallback.
  * - Uses only Apple frameworks: CommonCrypto + Security + CoreFoundation
@@ -939,4 +939,5 @@ int main(int argc, char **argv) {
 
     return 0;
 }
+
 
