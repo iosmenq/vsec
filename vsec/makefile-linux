@@ -1,0 +1,121 @@
+# Makefile for VSEC (Linux version)
+# Usage: make [target]
+
+# Compiler
+CC = gcc
+
+# Compiler flags
+CFLAGS = -O2 -Wall -Wextra -std=c11
+
+# Libraries
+LIBS = -lssl -lcrypto
+
+# Source and target
+SRC = vsec.c
+TARGET = vsec
+
+# Installation paths
+PREFIX = /usr/local
+BINDIR = $(PREFIX)/bin
+MANDIR = $(PREFIX)/share/man/man1
+
+# Default target
+all: $(TARGET)
+
+# Main target
+$(TARGET): $(SRC)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRC) $(LIBS)
+
+# Debug build
+debug: CFLAGS += -g -O0 -DDEBUG
+debug: clean $(TARGET)
+
+# Static linking
+static: LIBS += -static
+static: clean $(TARGET)
+
+# Install
+install: $(TARGET)
+	install -d $(BINDIR)
+	install -m 755 $(TARGET) $(BINDIR)/
+	@echo "VSEC installed to $(BINDIR)/"
+
+# Install with man page
+install-full: install install-man
+
+# Install man page
+install-man:
+	install -d $(MANDIR)
+	install -m 644 vsec.1 $(MANDIR)/
+	@echo "Man page installed to $(MANDIR)/"
+
+# Uninstall
+uninstall:
+	rm -f $(BINDIR)/$(TARGET)
+	rm -f $(MANDIR)/vsec.1
+	@echo "VSEC uninstalled"
+
+# Clean
+clean:
+	rm -f $(TARGET) *.o test_*.vsec test_*.txt test_*.bin *.vsec debug_vsec
+
+# Test
+test: $(TARGET)
+	@echo "=== Running VSEC Tests ==="
+	@echo "1. Creating test file..."
+	@echo "This is a secret message for testing." > test_input.txt
+	@echo "2. Encrypting with password..."
+	@./$(TARGET) -e -in test_input.txt -out test_output.vsec -pass "testpassword123"
+	@echo "3. Decrypting with password..."
+	@./$(TARGET) -d -in test_output.vsec -out test_decrypted.txt -pass "testpassword123"
+	@echo "4. Comparing files..."
+	@if cmp -s test_input.txt test_decrypted.txt; then \
+		echo "✅ Test PASSED: Files are identical"; \
+	else \
+		echo "❌ Test FAILED: Files differ"; \
+		diff test_input.txt test_decrypted.txt; \
+	fi
+	@echo "5. Testing wrong password..."
+	@./$(TARGET) -d -in test_output.vsec -out test_wrong.txt -pass "wrong" 2>/dev/null || echo "✅ Wrong password correctly rejected"
+	@echo "6. Testing empty file..."
+	@touch empty.txt
+	@./$(TARGET) -e -in empty.txt -out empty.vsec -pass "test"
+	@./$(TARGET) -d -in empty.vsec -out empty_decrypted.txt -pass "test"
+	@if [ ! -s empty_decrypted.txt ]; then \
+		echo "✅ Empty file test PASSED"; \
+	else \
+		echo "❌ Empty file test FAILED"; \
+	fi
+
+# Performance test
+benchmark: $(TARGET)
+	@echo "=== Performance Benchmark ==="
+	@dd if=/dev/urandom of=benchmark.bin bs=1M count=10 2>/dev/null
+	@time ./$(TARGET) -e -in benchmark.bin -out benchmark.vsec -pass "benchmarkpass"
+	@time ./$(TARGET) -d -in benchmark.vsec -out benchmark_decrypted.bin -pass "benchmarkpass"
+	@md5sum benchmark.bin benchmark_decrypted.bin | cut -d' ' -f1 | uniq | wc -l | grep -q 1 && echo "✅ Benchmark PASSED" || echo "❌ Benchmark FAILED"
+	@rm -f benchmark.bin benchmark.vsec benchmark_decrypted.bin
+
+# Build for distribution
+dist: clean
+	mkdir -p dist
+	cp $(SRC) Makefile README.md LICENSE dist/
+	tar -czf vsec-linux-$(shell date +%Y%m%d).tar.gz dist/
+	rm -rf dist
+	@echo "Distribution package created: vsec-linux-$(shell date +%Y%m%d).tar.gz"
+
+# Help
+help:
+	@echo "VSEC Makefile Targets:"
+	@echo "  all        - Build vsec (default)"
+	@echo "  debug      - Build with debug symbols"
+	@echo "  static     - Build with static linking"
+	@echo "  test       - Run tests"
+	@echo "  benchmark  - Run performance benchmark"
+	@echo "  install    - Install to system"
+	@echo "  uninstall  - Uninstall from system"
+	@echo "  clean      - Clean build files"
+	@echo "  dist       - Create distribution package"
+	@echo "  help       - Show this help"
+
+.PHONY: all debug static install uninstall clean test benchmark dist help
