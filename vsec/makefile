@@ -13,8 +13,8 @@ CFLAGS = -O2 -Wall -Wextra -isysroot $(SDK)
 FRAMEWORKS = -framework Security -framework CoreFoundation
 
 # Source and output
-SRC = vsec.c
-OUT = vsec
+SRC = vsec-ios.c
+OUT = vsec-ios
 
 # Default target
 all: $(OUT)
