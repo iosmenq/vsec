@@ -1,5 +1,5 @@
 # vsec
-VSecure mini file encryption via iOS, MacOS And Linux binary [_**IOS BINARY NEEDS A JAILBREAK**_]
+VSecure mini file encryption via iOS, MacOS And Linux binary _**[IOS BINARY NEEDS A JAILBREAK]**_
 
 **ENCRYPT A FILE: vsec -e -pass "-d -pass "Password" -in file.txt -out file.vsec**
 
