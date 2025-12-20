@@ -1,5 +1,5 @@
 /*
- * vsec.c
+ * vsec.c MacOS - iOS
  * Coded by iosmen (c) 2025
  *
  * - Supports JSON-based AES-256-CTR + HMAC-SHA256 vsec format and a small legacy fallback.
@@ -940,6 +940,7 @@ int main(int argc, char **argv) {
 
     return 0;
 }
+
 
 
 
