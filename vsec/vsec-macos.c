@@ -684,7 +684,7 @@ int main(int argc, char **argv) {
             char *q = strchr(p_sig, ':');
             if (q) {
                 q++;
-                while (*q == ' ' ) q++;
+                while (*q == ' ' || *q == '\t') q++;
                 if (*q == '\"') {
                     q++;
                     char *endq = strchr(q, '\"');
@@ -940,9 +940,3 @@ int main(int argc, char **argv) {
 
     return 0;
 }
-
-
-
-
-
-
