@@ -11,4 +11,7 @@ VSecure mini file encryption via iOS, MacOS And Linux binary [_**IOS BINARY NEED
 
 **BUILD NEED CLANG!!!**
 
-**BUILD COMMAND: clang -O2 -Wall -Wextra -o vsec vsec.c -framework Security -framework CoreFoundation**
+**BUILD COMMAND FOR IOS: clang -O2 -Wall -Wextra -o vsec vsec.c -framework Security -framework CoreFoundation**
+
+
+**BUILD COMMAND FOR LINUX: gcc -O2 -Wall -Wextra -o vsec vsec.c -lssl -lcrypto**
